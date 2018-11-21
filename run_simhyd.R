@@ -1,8 +1,7 @@
 
 # Directories
-rPath = 'C:/Users/rshojin/Desktop/006_scripts/R/simhyd/R'
-datPath = 'E:/R/siletz/001_data/'
-shpPath = 'E:/R/siletz/002_gis/'
+rPath = 'E:/R/simhyd/simhyd/'
+datPath = paste0(rPath, 'data/')
 
 # Load requisite function - DEPRECATE WHEN THIS IS A PACKAGE!
 sapply(list.files(pattern = "[.]R$", path = rPath, full.names = TRUE), source)
@@ -13,7 +12,7 @@ inFiles = c(paste0(datPath, 'par.csv'),                    # for parameters
             paste0(datPath, 'pet.csv'),                    # for PET data
             paste0(datPath, 'q.csv'),                      # for calibration flow data
             paste0(datPath, 'hru.csv'),                    # for hydro response unit areas
-            paste0(shpPath, 'siletz_catchments_HSPF.shp')) # for downstream flow links
+            paste0(datPath, 'siletz_catchments_HSPF.shp')) # for downstream flow links
 
 # Go git data!
 inputs = read_inputs(parFile = inFiles[1],
@@ -24,7 +23,7 @@ inputs = read_inputs(parFile = inFiles[1],
                      shpFile = inFiles[6])
 
 # Convert the downstream flow links into a process order
-proc_lnks
+lnks = proc_lnks(inputs[['lnks']])
 
 # for (i in 1 : nrow(inputs[['hru']])) {            # Loop on each basin
 #
