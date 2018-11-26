@@ -57,6 +57,8 @@ proc_lnks = function(lnks) {
   
   tmpOrd$ORD = 1 : nrow(lnks)
   
+  rownames(tmpOrd) = 1 : nrow(lnks)
+  
   procLnks = list('pOrd' = tmpOrd, 'cBas' = usBas)
   
   return(procLnks)
