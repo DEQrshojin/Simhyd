@@ -20,8 +20,6 @@ proc_routing <- function(qData, rte, lnks, dt) {
   
   cBas = inputs[['lnks']][['cBas']]
   
-  str = as.numeric(Sys.time())
-  
   # Hydrologic Flow Routing; C_0 x (RTRI)[i] + C_1 x RTRI[i-1] + C_2 x SMSK[i-1]
   for (bas in 1 : length(qData)) { # Iterate through each basin
 
@@ -52,31 +50,27 @@ proc_routing <- function(qData, rte, lnks, dt) {
     # Now take the inputs and route them
     for (day in 1 : nrow(qData[[n]][["TOT"]])) { # iterate on each day
 
-      # if(day == 1) {
+      if(day == 1) {
 
         # Outlow[i] = Baseflow[i] + US Inflow[i] + Later Inflow[i]
         qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] + # Baseflow
                                       qData[[n]][['TOT']][day, 4] + # Upstream inflows
                                       qData[[n]][['TOT']][day, 2]   # Lateral inflows
 
-      # } else {
+      } else {
 
         # Outlow[i] = Baseflow[i] + Inflow[i] + Inflow[i-1] + Outflow[i-1]
         # Turn this off to remove routing
-        # qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] +      # Baseflow [i]
-        #                  rte[n, 5] * (qData[[n]][['TOT']][day, 2] +      # Lat Q [i]
-        #                               qData[[n]][['TOT']][day, 4]) +     # US Q [i]
-        #                  rte[n, 6] * (qData[[n]][['TOT']][day - 1, 2] +  # Lat Q [i-1]
-        #                               qData[[n]][['TOT']][day - 1, 4]) + # US Q [i-1]
-        #                  rte[n, 7] *  qData[[n]][['TOT']][day - 1, 5]    # Out Q [i-1]
+        qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] +      # Baseflow [i]
+                         rte[n, 5] * (qData[[n]][['TOT']][day, 2] +      # Lat Q [i]
+                                      qData[[n]][['TOT']][day, 4]) +     # US Q [i]
+                         rte[n, 6] * (qData[[n]][['TOT']][day - 1, 2] +  # Lat Q [i-1]
+                                      qData[[n]][['TOT']][day - 1, 4]) + # US Q [i-1]
+                         rte[n, 7] *  qData[[n]][['TOT']][day - 1, 5]    # Out Q [i-1]
 
-      # }
+      }
     }
   }
-  
-  end = as.numeric(Sys.time())
-  
-  print(paste0("Processing time: ", round((end - str) / 60, 1), " minutes"))
   
   return(qData)
   

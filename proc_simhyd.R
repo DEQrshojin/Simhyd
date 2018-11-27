@@ -91,23 +91,23 @@ proc_simhyd = function(area, pars, met) { # numeric, list, data frame
 
     # 17. SGWS - Groundwater Storage; SGWS[i-1] + RREC[i] - OBAS[i]
     if(i == 1) {
-      tmpDF[i, 17] = 0 + tmpDF[i, 9] - tmpDF[i, 14]
+      tmpDF[i, 17] = 0 + tmpDF[i, 11] - tmpDF[i, 16]
     } else {
-      tmpDF[i, 17] = tmpDF[i - 1, 15] + tmpDF[i, 9] - tmpDF[i, 14]
+      tmpDF[i, 17] = tmpDF[i - 1, 17] + tmpDF[i, 11] - tmpDF[i, 16]
     }
   }
 
-  # Subset the DF to only include imprv (OIVR), infilt. (OIRN), sat. (OSRN), and baseflow (OBAS)
+  # Subset tmpDF for runoff: imprv (OIVR), infilt. (OIRN), sat. (OSRN), and baseflow (OBAS)
   latFlow = tmpDF[, c(4, 9, 10, 16)] # columns 1, 2, 3, 4
 
   # infiltration (OIRN), saturation excess (OSRN), and imperv runoff (OIVR) are "quickflow'
   latFlow$OQCK = latFlow$OIVR + latFlow$OIRN + latFlow$OSRN # column 5
-  
+
   # Convert to cfs
   if (area == 0) {
-    latFlow = latFlow * 0 # set to zero if catchment doesn't have any hru of that kind  
+    latFlow = latFlow * 0 # set to zero if catchment doesn't have any hru of that kind
   } else {
-    latFlow = latFlow * 25.4 / 12 * area * 43560 / 86400 # Conversion from mm/day to cfs
+    latFlow = latFlow / 25.4 / 12 * area * 43560 / 86400 # Conversion from mm/day to cfs
   }
 
   latFlow$Date = met$Date

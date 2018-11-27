@@ -1,7 +1,5 @@
 proc_presim <- function(inputs, qData, strDate, endDate) {
-  
-  str = as.numeric(Sys.time())
-  
+
   for (i in 1 : nrow(inputs[['hrus']])) {           # Loop on each basin
 
     for (j in 1 : length(inputs[['pars']])) {       # Loop on each HRU in each basin
@@ -33,10 +31,6 @@ proc_presim <- function(inputs, qData, strDate, endDate) {
 
     }
   }
-  
-  end = as.numeric(Sys.time())
-  
-  print(paste0("Processing time: ", round((end - str) / 60, 1), " minutes"))
   
   return(qData)
   
