@@ -19,12 +19,6 @@ proc_presim <- function(inputs, qData, strDate, endDate) {
                              'prc' = inputs[["met"]][["prc"]][, i + 1],
                              'pet' = inputs[["met"]][["pet"]][, i + 1]))
       
-      met$Date = as.POSIXct(met$Date, format = "%m/%d/%Y")
-      
-      met[, 2 : 3] = as.numeric(unlist(met[, 2 : 3]))
-      
-      met = met[which(met$Date >= strDate & met$Date <= endDate), ]
-      
       # 5) Pass the above parameters to the simhyd processing function to calculate lateral flows
       #    Returns a data frame to the list element
       qData[[i]][[j]] = proc_simhyd(area, pars, met)

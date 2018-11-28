@@ -1,0 +1,15 @@
+# TIME BLOCK
+time step = 1 # Days
+start date = 1991-10-01
+end date = 1992-10-01
+# FILES
+data files = E:/R/simhyd/simhyd/data
+# CONTROLS (1 = on; 0 = off)
+routing = 1
+
+# MODELS (1 = simhyd, 2 = AWBM)
+model = 1
+
+
+
+

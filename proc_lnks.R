@@ -3,15 +3,16 @@ proc_lnks = function(lnks) {
 
   # Make a list of each basin -- each list will have a vector of upstream basin(s) -- lists
   # are not cumulative, just the immediately upstream basin(s) for upstream inflow inputs
+  # Basins with no upstream basins (headwaters) have a value of 0
   usBas = rep(list(0), nrow(lnks))
   
-  twBas = unique(lnks$DSBs) # All tailwater basins
+  twBas = unique(lnks$DSBs) # All tailwater basins (anything downstream of another basin)
   
-  twBas = twBas[which(twBas != 0)]
+  twBas = twBas[which(twBas != 0)] # remove zeros (0 = watershed outlet)
 
   for (basin in twBas) {
     
-    usBas[[basin]] = lnks[which(lnks$DSB == basin), 1]
+    usBas[[basin]] = lnks[which(lnks$DSBs == basin), 1]
     
   }
 

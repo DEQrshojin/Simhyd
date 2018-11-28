@@ -1,10 +1,6 @@
-read_inputs = function(parFile = NULL,
-                       prcFile = NULL,
-                       petFile = NULL,
-                       flwFile = NULL,
-                       hruFile = NULL,
-                       shpFile = NULL,
-                       rteFile = NULL) {
+read_inputs = function(parFile = NULL, prcFile = NULL, petFile = NULL, flwFile = NULL,
+                       hruFile = NULL, shpFile = NULL, rteFile = NULL,
+                       strDate = NULL, endDate = NULL) {
 
   # LIBRARIES ----
   library(lubridate)
@@ -15,10 +11,10 @@ read_inputs = function(parFile = NULL,
   pars = read_pars(parFile)
 
   # 2) Read input meteorological data - must be in .csv
-  met = read_met(prcFile, petFile)
+  met = read_met(prcFile, petFile, strDate, endDate)
 
   # 3) Read flow data for calibration
-  flow = read_flow(flwFile)
+  flow = read_flow(flwFile, strDate, endDate)
 
   # 4) Read landuse; from csv for now
   hrus = read_hru(hruFile)

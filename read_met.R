@@ -6,11 +6,11 @@
 #' @examples
 #' read_met('file/path/to/precip_data.csv', 'file/path/to/pet_data.csv')
 
-read_met = function(prcFile, petFile) {
+read_met = function(prcFile, petFile, strDate, endDate) { 
 
   # Read PET
   prc = read.csv(prcFile)
-
+  
   # Read PET
   pet = read.csv(petFile)
 
@@ -20,6 +20,17 @@ read_met = function(prcFile, petFile) {
   names(prc) = c("Date", basID)
 
   names(pet) = c("Date", basID)
+  
+  # Clip the data to the model dates
+  prc$Date = as.POSIXct(prc$Date, format = "%m/%d/%Y")
+  
+  prc = prc[which(prc$Date >= strDate & prc$Date <= endDate), ]
+  
+  pet$Date = as.POSIXct(pet$Date, format = "%m/%d/%Y")
+  
+  pet = pet[which(pet$Date >= strDate & pet$Date <= endDate), ]
+  
+  # Aggregate into a list
 
   metData = list('prc' = prc, 'pet' = pet)
 
