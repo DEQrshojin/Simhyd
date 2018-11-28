@@ -22,12 +22,12 @@ run_simhyd <- function() {
 
   # Vector of full path names to input files
   inFiles <- c(paste0(datPath, 'par.csv'),                    # for parameters
-              paste0(datPath, 'p.csv'),                      # for precipitation data
-              paste0(datPath, 'pet.csv'),                    # for PET data
-              paste0(datPath, 'q.csv'),                      # for calibration flow data
-              paste0(datPath, 'hru.csv'),                    # for hydro response unit areas
-              paste0(datPath, 'siletz_basins.shp'), # for downstream flow links
-              paste0(datPath, 'rte.csv'))                    # for routing parameters     
+               paste0(datPath, 'p.csv'),                      # for precipitation data
+               paste0(datPath, 'pet.csv'),                    # for PET data
+               paste0(datPath, 'q.csv'),                      # for calibration flow data
+               paste0(datPath, 'hru.csv'),                    # for hydro response unit areas
+               paste0(datPath, 'siletz_basins.shp'),          # for downstream flow links
+               paste0(datPath, 'rte.csv'))                    # for routing parameters     
   
   # Go git data!
   inputs <- read_inputs(parFile <- inFiles[1],
@@ -49,7 +49,15 @@ run_simhyd <- function() {
   # Need to pass flow (qData) routing parameters (PDSL[K], PIOB[x]), catch links, and time step dt, 
   qData <- proc_routing(qData, inputs[['rte']], inputs[['lnks']], dt)
   
-  calib_simhyd(qData, inputs[['flow']])
+  # This list provides the constituents to be included in the calibration. For the analysis period
+  # The initial iteration of the program will only allow year-round, or one of the four seasons.
+  constituents <- list('dayNSE' = TRUE,
+                       'monNSE' = TRUE,
+                       'annVol' = TRUE,
+                       'flwDur' = TRUE,
+                       'annPer' = c('year round', 'winter', 'spring', 'summer', 'fall'))
+  
+  calib_simhyd(qData, inputs[['flow']], constituents)
   
   end <- as.numeric(Sys.time())
   
