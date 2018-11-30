@@ -1,8 +1,5 @@
 proc_routing <- function(qData, rte, lnks, dt) {
   
-  # qDataBU = qData
-  # qData = qDataBU
-  
   # Pre-process flow data for routing aggregate quickflows for all hrus in a basin
   qData = proc_prerout(qData)
 
@@ -50,25 +47,25 @@ proc_routing <- function(qData, rte, lnks, dt) {
     # Now take the inputs and route them
     for (day in 1 : nrow(qData[[n]][["TOT"]])) { # iterate on each day
 
-      if(day == 1) {
+      # if(day == 1) {
 
         # Outlow[i] = Baseflow[i] + US Inflow[i] + Later Inflow[i]
         qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] + # Baseflow
                                       qData[[n]][['TOT']][day, 4] + # Upstream inflows
                                       qData[[n]][['TOT']][day, 2]   # Lateral inflows
 
-      } else {
-
-        # Outlow[i] = Baseflow[i] + Inflow[i] + Inflow[i-1] + Outflow[i-1]
-        # Turn this off to remove routing
-        qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] +      # Baseflow [i]
-                         rte[n, 5] * (qData[[n]][['TOT']][day, 2] +      # Lat Q [i]
-                                      qData[[n]][['TOT']][day, 4]) +     # US Q [i]
-                         rte[n, 6] * (qData[[n]][['TOT']][day - 1, 2] +  # Lat Q [i-1]
-                                      qData[[n]][['TOT']][day - 1, 4]) + # US Q [i-1]
-                         rte[n, 7] *  qData[[n]][['TOT']][day - 1, 5]    # Out Q [i-1]
-
-      }
+      # } else {
+      # 
+      #   # Outlow[i] = Baseflow[i] + Inflow[i] + Inflow[i-1] + Outflow[i-1]
+      #   # Turn this off to remove routing
+      #   qData[[n]][['TOT']][day, 5] = qData[[n]][['TOT']][day, 3] +      # Baseflow [i]
+      #                    rte[n, 5] * (qData[[n]][['TOT']][day, 2] +      # Lat Q [i]
+      #                                 qData[[n]][['TOT']][day, 4]) +     # US Q [i]
+      #                    rte[n, 6] * (qData[[n]][['TOT']][day - 1, 2] +  # Lat Q [i-1]
+      #                                 qData[[n]][['TOT']][day - 1, 4]) + # US Q [i-1]
+      #                    rte[n, 7] *  qData[[n]][['TOT']][day - 1, 5]    # Out Q [i-1]
+      # 
+      # }
     }
   }
   

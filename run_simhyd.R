@@ -1,25 +1,37 @@
-run_simhyd <- function() {
+# RUN SIMHYD
+# Ryan Shojinaga, Oregon DEQ, shojinaga.ryan@deq.state.or.us
+# SimHyd Watershed Model with Routing
 
+for (i in 1) {
+
+  # INIT PROC TIME ----
   str = as.numeric(Sys.time())
+  
+  # INPUT BLOCK -- IN PLACE OF CONTROL FILE FOR NOW ----
+  #____________________________________________________#
   
   # READ CONTROL FILE
   # cf_data = read_control(controlFile)  
   
+  # Time inputs
   dt <- 1
-  strDate <- '2009-10-01'
-  endDate <- '2013-09-30'
+  
+  strDate <- '2007-09-01' # Seveb-year period around the NLCD 2011 data
+  endDate <- '2014-09-30'
   strDate <- as.POSIXct(strDate, format = '%Y-%m-%d')
   endDate <- as.POSIXct(endDate, format = '%Y-%m-%d')
   
   # Directories
   rPath <- 'E:/R/simhyd/simhyd/'
-  datPath <- paste0(rPath, 'data/')
+  datPath <- paste0(rPath, 'data_test_one/')
   
+  # LOAD FUNCTIONS ----
   # Load requisite function - DEPRECATE WHEN THIS IS A PACKAGE!
   rFiles <- list.files(pattern = "[.]R$", path = rPath, full.names = TRUE) # Generate list of R fils
   
   sapply(rFiles[-grep("run_simhyd", rFiles)], source) # Source all of the functions except this one
-
+  
+  # READ DATA ----
   # Vector of full path names to input files
   inFiles <- c(paste0(datPath, 'par.csv'),                    # for parameters
                paste0(datPath, 'p.csv'),                      # for precipitation data
@@ -39,6 +51,7 @@ run_simhyd <- function() {
                         rteFile <- inFiles[7],
                         strDate, endDate)
   
+  # SIMHYD AND ROUTING PROCESSING ----
   # Initialize the list that will house all of the lateral catchment in-flows
   qData <- qlist_init(inputs[['hrus']]$BASIN, names(inputs[['pars']])) # Basin names then HRU names
   
@@ -49,20 +62,17 @@ run_simhyd <- function() {
   # Need to pass flow (qData) routing parameters (PDSL[K], PIOB[x]), catch links, and time step dt, 
   qData <- proc_routing(qData, inputs[['rte']], inputs[['lnks']], dt)
   
-  # This list provides the constituents to be included in the calibration. For the analysis period
-  # The initial iteration of the program will only allow year-round, or one of the four seasons.
-  constituents <- list('dayNSE' = TRUE,
-                       'monNSE' = TRUE,
-                       'annVol' = TRUE,
-                       'flwDur' = TRUE,
-                       'annPer' = c('year round', 'winter', 'spring', 'summer', 'fall'))
-  
-  calib_simhyd(qData, inputs[['flow']], constituents)
-  
   end <- as.numeric(Sys.time())
   
   print(paste0("Processing time: ", round((end - str) / 60, 2), " minutes"))
   
-  return(qData)
-  
 }
+
+
+
+
+
+
+
+
+

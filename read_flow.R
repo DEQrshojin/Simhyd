@@ -12,7 +12,7 @@ read_flow = function(flwFile, strDate, endDate) {
 
   # Read flow data for calibration
   flw = read.csv(flwFile)
-
+  
   # Aggregate into mean daily flows
   flw$DATE2 = as.Date(flw$DATE, format = "%m/%d/%Y %H:%M")
   
@@ -24,11 +24,13 @@ read_flow = function(flwFile, strDate, endDate) {
   
   names(flwSlz) = c("Date", "QCFS")
   
-  flwSlz$Date = as.POSIXct(flwSlz$Date, format = "%Y-%m-%d", tz = "America/Los_Angeles") + hours(7)
-
+  flwSlz$Date = as.POSIXct(flwSlz$Date, format = "%Y-%m-%d", tz = "America/Los_Angeles")
+  
+  flwSlz$Date = ifelse(hour(flwSlz$Date) == 17, flwSlz$Date + hours(7), flwSlz$Date + hours(8))
+  
   # Truncate to the modeling start and end dates
   flwSlz = flwSlz[which(flwSlz$Date >= strDate & flwSlz$Date <= endDate), ]
-
+  
   return(flwSlz)
 
 }
