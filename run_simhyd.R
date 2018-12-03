@@ -22,7 +22,7 @@ for (i in 1) {
   endDate <- as.POSIXct(endDate, format = '%Y-%m-%d')
   
   # Directories
-  rPath <- 'E:/R/simhyd/simhyd/'
+  rPath <- 'C:/Users/ryans/Desktop/001_RMS/002_projects/scripts/simhyd_v2/'
   datPath <- paste0(rPath, 'data_test_one/')
   
   # LOAD FUNCTIONS ----
@@ -52,27 +52,28 @@ for (i in 1) {
                         strDate, endDate)
   
   # SIMHYD AND ROUTING PROCESSING ----
-  # Initialize the list that will house all of the lateral catchment in-flows
-  qData <- qlist_init(inputs[['hrus']]$BASIN, names(inputs[['pars']])) # Basin names then HRU names
+  qData <- proc_model(inputs)
+
+  # CALIBRATION ----
+  strDate <- '2008-10-01' # Seven-year period around the NLCD 2011 data
+  endDate <- '2014-09-30'
   
-  # Send inputs, routC and qData to proc_presim which will stage the info and send on to proc_simhyd
-  qData <- proc_presim(inputs, qData, strDate, endDate)
+  calBas <- 1 # Should build this into the shapefile
+  fdcPar <- c(100, 1) # First number is the lower limit of flow percentage, second is the step
+
+  calIn <- list('flw' = qData,
+                'dir' = rPath,
+                'bas' = calBas,
+                'fdc' = fdcPar,
+                'str' = strCal,
+                'end' = endCal)
   
-  # Process stream routing - Muskingum routing used
-  # Need to pass flow (qData) routing parameters (PDSL[K], PIOB[x]), catch links, and time step dt, 
-  qData <- proc_routing(qData, inputs[['rte']], inputs[['lnks']], dt)
+  calStt <- calib_symhyd(calIn)
   
   end <- as.numeric(Sys.time())
   
   print(paste0("Processing time: ", round((end - str) / 60, 2), " minutes"))
   
 }
-
-
-
-
-
-
-
 
 

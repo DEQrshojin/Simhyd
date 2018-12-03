@@ -1,10 +1,10 @@
-PAR,GRP,UNT,VAR,FRL
-Baseflow coeff,1,,PBAS,0.03
-Infiltration coeff,1,mm,PINC,200
-Infiltration shape,1,,PINS,0.3
-Interflow coeff,1,,PITC,0.5
-Recharge coeff,1,,PRCH,0.1
-Rainfall Interception,1,mm,PRSC,0
-Soil Moisture Storage,1,mm,PSMS,500
-Pervious Fraction,1,,PPVF,1
-Impervious Threshold,1,mm,PIVT,0
+"PAR","GRP","UNT","VAR","FRL"
+"Baseflow coeff",1,"","PBAS",0.023
+"Infiltration coeff",1,"mm","PINC",400
+"Infiltration shape",1,"","PINS",0.75
+"Interflow coeff",1,"","PITC",0.09
+"Recharge coeff",1,"","PRCH",0.4
+"Rainfall Interception",1,"mm","PRSC",5
+"Soil Moisture Storage",1,"mm","PSMS",50
+"Pervious Fraction",1,"","PPVF",1
+"Impervious Threshold",1,"mm","PIVT",0
