@@ -8,15 +8,15 @@ for (i in 1) {
   clbTxt <- read.csv(paste0(datPath, 'calib.csv'))
   run = clbTxt[nrow(clbTxt), 1] + 1
   # Set the parameters
-  parTxt[1, 5] <- 0.023 # ****GOOD**** Baseflow
-  parTxt[2, 5] <- 400.0 # ****GOOD**** Infiltration coefficient
-  parTxt[3, 5] <- 0.750 # ****GOOD**** Infitration shape
-  parTxt[4, 5] <- 0.090 # ****GOOD**** Interflow coefficient
-  parTxt[5, 5] <- 0.400 # ****GOOD**** Recharge coefficient
-  parTxt[6, 5] <- 5.000 # ****GOOD**** Rainfall interception
-  parTxt[7, 5] <- 50.00 # ****GOOD**** Soil moisture storage
-  parTxt[8, 5] <- 1.000 # ****GOOD**** Pervious fraction
-  parTxt[9, 5] <- 0.000 # ****GOOD**** Impervious threshold
+  parTxt[1, 5] <- 0.023 # Baseflow
+  parTxt[2, 5] <- 400.0 # Infiltration coefficient
+  parTxt[3, 5] <- 0.750 # Infitration shape
+  parTxt[4, 5] <- 0.090 # Interflow coefficient
+  parTxt[5, 5] <- 0.400 # Recharge coefficient
+  parTxt[6, 5] <- 5.000 # Rainfall interception
+  parTxt[7, 5] <- 50.00 # Soil moisture storage
+  parTxt[8, 5] <- 1.000 # Pervious fraction
+  parTxt[9, 5] <- 0.000 # Impervious threshold
   rteTxt[1, 2] <- 0.000 # Turned off Routing delay
   rteTxt[1, 3] <- 0.100 # Turned off Inflow/outflow bias
   # Check the conditions on the routing parameters x < 0.5 Dt/k < 1 - x

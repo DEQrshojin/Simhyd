@@ -2,34 +2,36 @@
 # Ryan Shojinaga, Oregon DEQ, shojinaga.ryan@deq.state.or.us
 # SimHyd Watershed Model with Routing
 
+# To dos:
+# 1) Fix the calibration scripts
+# 2) Write in the reading from a control file
+# 3) Routing ON/OFF switch
+
+
 for (i in 1) {
 
   # INIT PROC TIME ----
   str = as.numeric(Sys.time())
   
-  # INPUT BLOCK -- IN PLACE OF CONTROL FILE FOR NOW ----
-  #____________________________________________________#
-  
-  # READ CONTROL FILE
-  # cf_data = read_control(controlFile)  
-  
   # Time inputs
   dt <- 1
   
-  strDate <- '2007-09-01' # Seveb-year period around the NLCD 2011 data
-  endDate <- '2014-09-30'
+  strDate <- '2011-10-01'
+  endDate <- '2011-10-31'
   strDate <- as.POSIXct(strDate, format = '%Y-%m-%d')
   endDate <- as.POSIXct(endDate, format = '%Y-%m-%d')
   
   # Directories
-  rPath <- 'C:/Users/ryans/Desktop/001_RMS/002_projects/scripts/simhyd_v2/'
-  datPath <- paste0(rPath, 'data_test_one/')
+  rPath <- 'E:/R/simhyd/simhyd/'
+  cPath <- paste0(rPath, 'calibration/')
+  datPath <- paste0(rPath, 'data/')
   
   # LOAD FUNCTIONS ----
   # Load requisite function - DEPRECATE WHEN THIS IS A PACKAGE!
   rFiles <- list.files(pattern = "[.]R$", path = rPath, full.names = TRUE) # Generate list of R fils
-  
+  cFiles <- list.files(pattern = "[.]R$", path = cPath, full.names = TRUE) # Generate list of R fils
   sapply(rFiles[-grep("run_simhyd", rFiles)], source) # Source all of the functions except this one
+  sapply(cFiles, source) # Source all of the functions except this one
   
   # READ DATA ----
   # Vector of full path names to input files
@@ -54,26 +56,29 @@ for (i in 1) {
   # SIMHYD AND ROUTING PROCESSING ----
   qData <- proc_model(inputs)
 
-  # CALIBRATION ----
-  strDate <- '2008-10-01' # Seven-year period around the NLCD 2011 data
-  endDate <- '2014-09-30'
-  
-  calBas <- 1 # Should build this into the shapefile
-  fdcPar <- c(100, 1) # First number is the lower limit of flow percentage, second is the step
-
-  calIn <- list('flw' = qData,
-                'dir' = rPath,
-                'bas' = calBas,
-                'fdc' = fdcPar,
-                'str' = strCal,
-                'end' = endCal)
-  
-  calStt <- calib_symhyd(calIn)
-  
   end <- as.numeric(Sys.time())
   
   print(paste0("Processing time: ", round((end - str) / 60, 2), " minutes"))
   
 }
 
+# CALIBRATION ----
+# strCal <- '2008-10-01' # Seven-year period around the NLCD 2011 data
+# endCal <- '2014-09-30'
+# calBas <- 1 # Should build this into the shapefile
+# calIn <- list('qmd' = qData,
+#               'qgg' = inputs[['flow']],
+#               'dir' = datPath,
+#               'bas' = calBas,
+#               'str' = strCal,
+#               'end' = endCal)
+# 
+# calStt <- calib_simhyd(calIn)
 
+# wqData <- wq_emcdwc(qData, datPath)
+
+# INPUT BLOCK -- IN PLACE OF CONTROL FILE FOR NOW ----
+#____________________________________________________#
+
+# READ CONTROL FILE
+# cf_data = read_control(controlFile)  
